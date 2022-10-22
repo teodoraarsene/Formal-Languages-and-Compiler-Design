@@ -1,0 +1,25 @@
+Alphabet:
+	a. upper (A-Z) and lower case letters (a-z) of the English alphabet
+	b. decimal digits (0-9)
+	c. special characters (+, -, *, /, (, ), =, {, }, [, ], <, >, _, ', ", ;, ,)
+
+Lexic:
+	a. special symbols, representing:, >, <=, >=, =, ==
+		- separators: [, ], {, }, (, ), ', ", space, newline, tab
+		- reserved words: int, char, string, if, else, for, print, input
+	b. identifiers:
+		-> a sequence of letters and digits
+		- operators: +, -, *, /, < such that the first character is a letter
+		-> rule: identifier = letter | {letter | digit}.
+				 letter = "a" | "b" | "c" | ... | "z" | "A" | "B" | "C" | ... | "Z".
+				 digit = "0" | "1" | "2" | ... | "9".
+	c. constants:
+		1. integer
+			-> rule: const_int = "0" | ["+" | "-"] non_zero_digit {digit}.
+					 digit = "0" | non_zero_digit.
+					 non_zero_digit = "1" | "2" | "3" | ... | "9".
+		2. character:
+			-> rule: const_char = "'" char "'".
+					 char = letter | digit
+		3. string:
+			-> rule: string_const = """ {char} """.
