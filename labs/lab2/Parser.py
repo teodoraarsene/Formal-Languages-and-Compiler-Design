@@ -24,7 +24,7 @@ class Parser:
         with open(self.exercise_path, 'r') as f:
             text = f.read()
 
-        tokens = re.split('(\s|\(|\)|{|}|[|]|and|or|<=|>=|==|=)', text)
+        tokens = re.split('(\s|\(|\)|{|}|[|]|"|and|or|<=|>=|==|=)', text)
         tokens = list(filter(''.__ne__, tokens))
         tokens = list(filter(' '.__ne__, tokens))
         tokens = list(filter('\n'.__ne__, tokens))

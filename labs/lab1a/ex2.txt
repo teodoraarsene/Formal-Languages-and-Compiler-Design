@@ -1,0 +1,17 @@
+int x
+x = 4
+
+int f
+f = 1
+
+if (x < 0)
+{
+	print("error: the factorial can only be computed for positive numbers")
+}
+
+for (int i = 1; i <= x; i=i+1)
+{
+	f = f * i
+}
+
+print(f)

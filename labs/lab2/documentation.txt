@@ -1,0 +1,15 @@
+Documentation - lab2
+
+https://github.com/teodoraarsene/Formal-Languages-and-Compiler-Design/tree/main/labs/lab2
+
+Assignment:
+    -> Symbol Table:
+        - separate tables for identifiers, respectively constants (create 2 instances)
+    -> Symbol Table (you need to implement the data structure and required operations):
+        - hash table
+
+    The hashing is done by computing the sum of ascii codes modulo the size of the hash table.
+    The elements of the hash table are singly-linked-lists, in this way the problem of collisions is handled.
+
+    For the insertion of a new element in the hash table, the hash of the element is computed and a new node is created and added at the emd of the linked list positioned on the index with the hashed value.
+    For the search of an element in the hash table, the hash is computed and then the search continues in the linked list corresponding to the hash position.
