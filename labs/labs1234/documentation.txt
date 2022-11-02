@@ -1,0 +1,11 @@
+Documentation
+
+Link to github: https://github.com/teodoraarsene/Formal-Languages-and-Compiler-Design/tree/main/labs/labs1234
+
+ - HashTable using modular hashing; in case of collisions, a deque is used to store the values with the same hash.
+ - SymbolTable implemented using the hashtable for storing the symbols of the language.
+ - ProgramInternalForm is a list containing tuples storing the token and its location in the SymbolTable or the Tokens.in depending on the type of the token.
+
+The input program is scanned into tokens which are furthermore categorized into reserved tokens, constants or identifiers.
+The constants and identifiers are each added to their own SymbolTable.
+Then the ProgramInternalForm is formed by storing the tokens and their position in the SymbolTable or Token.in.
