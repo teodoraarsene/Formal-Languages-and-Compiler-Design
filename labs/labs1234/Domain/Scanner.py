@@ -1,21 +1,24 @@
 import re
 
+from Domain.FiniteAutomata import FiniteAutomata
+
 
 class Scanner:
 
     def __init__(self, separators, operators):
+        self.fa_int_consts = FiniteAutomata.process_file('finite_automata_int_const.in')
+        self.fa_identifiers = FiniteAutomata.process_file('finite_automata_identifiers.in')
         self.__separators = separators
         self.__operators = operators
         self.cases = ["=+", "<+", ">+", "<=+", ">=+", "==+", "!=+", "=-", "<-", ">-", "<=-", ">=-", "==-", "!=-"]
 
     def is_identifier(self, token) -> bool:
-        return re.match(r'^[a-z]([a-zA-Z]|[0-9])*$', token) is not None
-
-
+        # return re.match(r'^[a-z]([a-zA-Z]|[0-9])*$', token) is not None
+        return self.fa_identifiers.is_accepted(token)
 
     def is_constant(self, token) -> bool:
-        return re.match(r'^(0|[+-]?[1-9][0-9]*)$|^\'.\'$|^\'.*\'$', token) is not None
-
+        # return re.match(r'^(0|[+-]?[1-9][0-9]*)$|^\'.\'$|^\'.*\'$', token) is not None
+        return self.fa_int_consts.is_accepted(token)
 
     def is_part_of_an_operator(self, char) -> bool:
         for operator in self.__operators:
@@ -30,7 +33,8 @@ class Scanner:
         while index < len(line) and quotes < 2:
             if line[index] == '\'':
                 quotes += 1
-            token += line[index]
+            else:
+                token += line[index]
             index += 1
 
         return token, index

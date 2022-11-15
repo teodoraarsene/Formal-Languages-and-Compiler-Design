@@ -19,7 +19,7 @@ class Main:
 
     def run(self):
 
-        problem_file = "Problem1.txt"
+        problem_file = "Problem1err.txt"
         exception_message = ""
 
         with open(problem_file, 'r') as file:

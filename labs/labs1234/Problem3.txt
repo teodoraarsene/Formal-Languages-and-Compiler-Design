@@ -15,6 +15,6 @@ if(ok==1){
 cwrite('prime');
 }
 else {
-cwrite('not_prime');
+cwrite('notPrime');
 }
 end

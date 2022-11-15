@@ -14,8 +14,8 @@ Symbol Table:
 11 -> deque([])
 12 -> deque(['firstNumber'])
 13 -> deque([])
-14 -> deque(['secondNumber'])
-15 -> deque([])
+14 -> deque(['secondNumber', 'end'])
+15 -> deque(['a'])
 16 -> deque(['thirdNumber'])
 constants:
 Symbol Table:
