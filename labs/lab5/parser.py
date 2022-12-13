@@ -9,7 +9,7 @@ class Parser:
         self.__output_file = out_file
         self.__init_output_file()
         print(self.__sequence)
-        print(self.__grammar)
+        print(self.__grammar.grammar)
 
         # alpha - working stack, stores the way the parse is build
         self.__working_stack = []
@@ -25,6 +25,20 @@ class Parser:
 
         # representation - parsing tree
         self.__tree = list()
+
+        self.__parser_out = ParserOutput(self)
+
+    @property
+    def state(self):
+        return self.__state
+
+    @property
+    def working_stack(self):
+        return self.__working_stack
+
+    @property
+    def tree(self):
+        return self.__tree
 
     @staticmethod
     def __read_sequence(sequence_file: str) -> list:
@@ -50,17 +64,17 @@ class Parser:
         creates the output file
         :return: -
         """
-        file = open(self.__output_file, 'w')
+        file = open(self.__output_file, 'a')
         file.write('')
         file.close()
 
-    def __write_in_output_file(self, text: str):
+    def write_in_output_file(self, text: str):
         """
         writes in the output file
         :param text: the message to be written
         :return: -
         """
-        with open(self.__output_file, 'w') as f:
+        with open(self.__output_file, 'a') as f:
             f.write(text)
 
     def expand(self):
@@ -70,11 +84,11 @@ class Parser:
         :return: -
         """
         print('<-----> EXPAND <----->')
-        self.__write_in_output_file('<-----> EXPAND <----->')
+        self.write_in_output_file('<-----> EXPAND <----->')
         non_terminal = self.__input_stack.pop(0)  # pop A from beta
         self.__working_stack.append((non_terminal, 0))  # alpha -> alpha A1
-        new_production = self.__grammar.get_productions_for_non_terminal(non_terminal)[0]
-        self.__input_stack = [new_production] + self.__input_stack
+        new_production = list(self.__grammar.get_productions_for_non_terminal(non_terminal)[0])
+        self.__input_stack = new_production + self.__input_stack
 
     def advance(self):
         """
@@ -83,7 +97,7 @@ class Parser:
         :return: -
         """
         print('<-----> ADVANCE <----->')
-        self.__write_in_output_file('<-----> ADVANCE <----->')
+        self.write_in_output_file('<-----> ADVANCE <----->')
         self.__working_stack.append(self.__input_stack.pop(0))  # pop a_i from beta and add to alpha
         self.__index += 1
 
@@ -94,7 +108,7 @@ class Parser:
         :return: -
         """
         print('<-----> MOMENTARY INSUCCESS <----->')
-        self.__write_in_output_file('<-----> MOMENTARY INSUCCESS <----->')
+        self.write_in_output_file('<-----> MOMENTARY INSUCCESS <----->')
         self.__state = 'b'
 
     def another_try(self):
@@ -105,7 +119,7 @@ class Parser:
         :return:
         """
         print('<-----> ANOTHER TRY <----->')
-        self.__write_in_output_file('<-----> ANOTHER TRY <----->')
+        self.write_in_output_file('<-----> ANOTHER TRY <----->')
 
         last_production = self.__working_stack.pop()  # tuple of non-terminal and production number
         if last_production[1] + 1 < len(self.__grammar.get_productions_for_non_terminal(last_production[0])):
@@ -115,12 +129,13 @@ class Parser:
             self.__working_stack.append(new_production)
 
             # remove the old production from the input stack
-            len_old_production = len(self.__grammar.get_productions_for_non_terminal(last_production[0])[last_production[1]])
+            len_old_production = len(
+                self.__grammar.get_productions_for_non_terminal(last_production[0])[last_production[1]])
             self.__input_stack = self.__input_stack[len_old_production:]
 
             # put the new production in the input stack
-            new_production_out = self.__grammar.get_productions_for_non_terminal(new_production[0])[new_production[1]]
-            self.__input_stack = [new_production_out] + self.__input_stack
+            new_production_out = list(self.__grammar.get_productions_for_non_terminal(new_production[0])[new_production[1]])
+            self.__input_stack = new_production_out + self.__input_stack
 
         elif self.__index == 0 and last_production[0] == self.__grammar.starting_symbol:
             print(self.__index)
@@ -128,7 +143,8 @@ class Parser:
 
         else:
             # change the production on the top of the input stack
-            len_old_production = len(self.__grammar.get_productions_for_non_terminal(last_production[0])[last_production[1]])
+            len_old_production = len(
+                self.__grammar.get_productions_for_non_terminal(last_production[0])[last_production[1]])
             self.__input_stack = self.__input_stack[len_old_production:]
             self.__input_stack = [last_production[0]] + self.__input_stack
 
@@ -140,7 +156,7 @@ class Parser:
         :return: -
         """
         print('<-----> BACK <----->')
-        self.__write_in_output_file('<-----> BACK <----->')
+        self.write_in_output_file('<-----> BACK <----->')
         terminal = self.__working_stack.pop()
         self.__input_stack = [terminal] + self.__input_stack
         self.__index -= 1
@@ -151,7 +167,7 @@ class Parser:
         :return: -
         """
         print('<-----> SUCCESS <----->')
-        self.__write_in_output_file('<-----> SUCCESS <----->')
+        self.write_in_output_file('<-----> SUCCESS <----->')
         self.__state = 'f'
 
     def print_working_stack(self):
@@ -160,7 +176,7 @@ class Parser:
         :return: -
         """
         print(self.__working_stack)
-        self.__write_in_output_file(str(self.__working_stack))
+        self.write_in_output_file(str(self.__working_stack))
 
     def compute_parsing_tree(self):
         """
@@ -181,7 +197,8 @@ class Parser:
                 self.__tree[index].father = father
                 father = index
                 # compute the length of the production of a non-terminal
-                len_productions = len(self.__grammar.productions[self.__working_stack[index][0]][self.__working_stack[index][1]])
+                len_productions = len(
+                    self.__grammar.productions[self.__working_stack[index][0]][self.__working_stack[index][1]])
                 vector_index = list()
                 for i in range(1, len_productions + 1):
                     vector_index.append(index + 1)
@@ -234,9 +251,9 @@ class Parser:
             self.print_working_stack()
 
         print(message)
-        self.__write_in_output_file(message + '\n----- END ------\n')
+        self.write_in_output_file(message + '\n----- END ------\n')
         self.compute_parsing_tree()
-        print(self.__tree)
+        self.__parser_out.write_parsing_tree()
 
     def __write_all_data(self):
         with open(self.__output_file, 'a') as f:
@@ -245,6 +262,24 @@ class Parser:
             f.write(str(self.__working_stack) + '\n')
             f.write(str(self.__input_stack) + '\n')
 
+
+class ParserOutput:
+    def __init__(self, parser: Parser):
+        self.__parser = parser
+
+    def write_parsing_tree(self):
+        """
+        writes the parsing tree in a readable format in the output file and command line
+        :return: -
+        """
+        if self.__parser.state != 'e':
+            self.__parser.write_in_output_file('\n<-----> PARSING TREE <----->\n')
+            self.__parser.write_in_output_file('INDEX INFO PARENT LEFT_SIBLING\n')
+            for index in range(len(self.__parser.working_stack)):
+                msg = str(index) + ' ' + str(self.__parser.tree[index])
+                self.__parser.write_in_output_file(msg + '\n')
+
+
 if __name__ == '__main__':
-    parser = Parser("grammar1.txt", "seq.in", "out.txt")
+    parser = Parser("grammar2.txt", "seq.in", "out.txt")
     parser.run()
