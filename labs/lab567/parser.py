@@ -15,7 +15,7 @@ class Parser:
         self.__working_stack = []
 
         # beta - input stack
-        self.__input_stack = [self.__grammar.starting_symbol]  # ['a', 'S', 'b', 'S', 'b', 'S']
+        self.__input_stack = [self.__grammar.starting_symbol]
 
         # s: q - normal state, b - back state, f - final state, e - error state
         self.__state = "q"
@@ -80,7 +80,7 @@ class Parser:
     def expand(self):
         """
         head of input stack os a non-terminal
-        (q, i, alpha, A beta) ⊢ (q, i, alpha A1, gamma1 beta)
+        (q, i, alpha, A beta) --> (q, i, alpha A1, gamma1 beta)
         :return: -
         """
         print('<-----> EXPAND <----->')
@@ -93,7 +93,7 @@ class Parser:
     def advance(self):
         """
         head of input stack is a terminal which is the current symbol from the input sequence
-        (q, i, alpha, a_i beta) ⊢ (q, i + 1, alpha a_i, beta)
+        (q, i, alpha, a_i beta) --> (q, i + 1, alpha a_i, beta)
         :return: -
         """
         print('<-----> ADVANCE <----->')
@@ -104,7 +104,7 @@ class Parser:
     def momentary_insuccess(self):
         """
         head of input stack is a terminal which is not the current symbol from the input sequence
-        (q, i, alpha, beta) ⊢ (b, i, alpha, beta)
+        (q, i, alpha, beta) --> (b, i, alpha, beta)
         :return: -
         """
         print('<-----> MOMENTARY INSUCCESS <----->')
@@ -115,7 +115,7 @@ class Parser:
         """
         head of input stack is a terminal which is not the current symbol from the input sequence
             and other productions are available
-        (b, i, alpha A1, gamma1 beta) ⊢ (q, i, alpha A2, gamma2 beta)
+        (b, i, alpha A1, gamma1 beta) --> (q, i, alpha A2, gamma2 beta)
         :return:
         """
         print('<-----> ANOTHER TRY <----->')
@@ -152,7 +152,7 @@ class Parser:
         """
         head of input stack is a terminal which is not the current symbol from the input sequence
             and no other productions are available
-        (b, i, alpha a, beta) ⊢ (b, i-1, alpha, a beta)
+        (b, i, alpha a, beta) --> (b, i-1, alpha, a beta)
         :return: -
         """
         print('<-----> BACK <----->')
@@ -281,5 +281,5 @@ class ParserOutput:
 
 
 if __name__ == '__main__':
-    parser = Parser("grammar2.txt", "seq.in", "out.txt")
+    parser = Parser("grammar1.txt", "seq.in", "out.txt")
     parser.run()
